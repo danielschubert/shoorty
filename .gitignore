@@ -1,2 +1,5 @@
 user_guide/
 system/
+*.swp
+*.tar.gz
+
