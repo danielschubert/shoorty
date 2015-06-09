@@ -8,22 +8,20 @@ class Shorty extends CI_Controller {
                 $this->load->model('shorty_model');
         }
 
-
 	public function index()
 	{
                 $this->load->helper('url');
-                
+                $this->load->view('shorty/header');
+
                 if ($sl = $this->input->get('sl', TRUE))
                 {
                         if ( !is_numeric($sl) ) 
                         {
-                            $this->load->view('shorty/header');
                             $this->load->view('shorty/invalid');
                         }
                 
                         elseif ( !$this->shorty_model->redirect($sl) )
                         {
-                            $this->load->view('shorty/header');
                             $this->load->view('shorty/invalid'); 
                         }
                 } 
@@ -31,10 +29,10 @@ class Shorty extends CI_Controller {
                 {
                         #test ausgabe  
                         $data['shorty'] = $this->shorty_model->get_all_entries();	    
-
-                        $this->load->view('shorty/header');
                         $this->load->view('shorty', $data);
                 }
+                
+                $this->load->view('shorty/footer');
         }
 
         public function shorten()
@@ -47,9 +45,10 @@ class Shorty extends CI_Controller {
                 # validate form input
                 $this->form_validation->set_rules('url', 'Link', 'required');
 
+                $this->load->view('shorty/header');
+
                 if ($this->form_validation->run() === FALSE)
                 {
-                        $this->load->view('shorty/header');
                         $this->load->view('shorty/invalid'); 
                 }
                 else
@@ -62,9 +61,16 @@ class Shorty extends CI_Controller {
                         $data['sl'] = $shortlink;
                         $data['url'] = $url;
                         
-                        $this->load->view('shorty/header');
                         $this->load->view('shorty/success', $data);
                 }
+
+                $this->load->view('shorty/footer');
         }
+
+        public function output(){
+              $string = $this->output->get_output();
+              $this->output->set_output("aaa");
+        }
+
 }
 
