@@ -2,9 +2,14 @@
 	<div class="page-header"><h1>Willkommen bei Shoorty <small> der ultimative Link Kürzer!</small></h1></div>
 
 	<div class="jumbotron">
-            <?php 
+        
+        <?php
             $this->load->helper('form');
+            
+            //echo validation_errors(); 
+            
             echo form_open('shorty/shorten');
+      
             $attr = array('class' => 'glyphicon glyphicon-plus');
             echo '<span style="margin-right: 5%;">' . form_label('Link einfügen   ', 'shorten', $attr) . '</span>';
 
@@ -15,14 +20,18 @@
                           'maxlength'   => '100',
                           'size'        => '50',
                           'style'       => 'width:50%',
-                          'type'        => 'url'
+                          'type'        => 'url',
+                          'required'    => 'required'
                         );
 
             echo form_input($data);
+        
             $attr = array('class' => 'btn btn-primary', 'name'=> 'shorten');
             echo '<span style="margin-left: 5%;">' . form_submit($attr, 'Shoorten Me!') . '</span>'; 
-            echo form_close();
-            ?>
+            
+            echo form_close();   
+         ?>
+
         </div> <!-- jumbotron -->
 
 
