@@ -27,7 +27,7 @@ class Shorty extends CI_Controller {
                         }
                         elseif ( !$this->shorty_model->redirect($sl) )
                         {
-                                $this->load->view('shorty/invalid'); 
+                          $this->load->view('shorty/redirect-fault'); 
                         }
                 } 
                 else 
