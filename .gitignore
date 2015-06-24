@@ -1,11 +1,9 @@
 user_guide/
 system/
-<<<<<<< HEAD
 *.tar.gz
 *.swp
 .sass-cache/
 =======
 *.swp
 *.tar.gz
-
->>>>>>> master
+*.sqlite

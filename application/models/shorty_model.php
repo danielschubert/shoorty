@@ -1,5 +1,4 @@
 <?php
-
 class Shorty_model extends CI_Model {
     
         var $url ='';
@@ -22,22 +21,19 @@ class Shorty_model extends CI_Model {
                 #creates crc32 checksum from url. 
                 $shortlink = crc32($url);
 
-                # mach die cheksum positiv
-                // if ( $shortlink < 0 ) { $shortlink = $shortlink * (-1);}
-    
                 return $shortlink;
         }
 
-        public function redirect($shortlink) 
+        public function send_to_target($shortlink) 
         {
-                # redirecting to the real url
-                $query = $this->db->query(" SELECT * FROM `shorty` WHERE `shortlink` = '$shortlink' ");
-       
+                $query = $this->db->query("SELECT * FROM `shorty` WHERE `shortlink` = '$shortlink'");
+
                 if ( $query->num_rows() > 0 )  
                 {
                         $this->load->helper('url');
                         $url = $query->row()->url;
-
+                        
+                        # redirecting to the real url
                         redirect($url, 'location', 301);
                 }                
                 else

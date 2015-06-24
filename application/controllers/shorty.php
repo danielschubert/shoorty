@@ -21,13 +21,17 @@ class Shorty extends CI_Controller {
     
                 if ($sl = $this->input->get('sl', TRUE))
                 {
+                        # very basic check whether shortlink ist valid 
                         if ( !is_numeric($sl) ) 
                         {
                                 $this->load->view('shorty/invalid');
                         }
-                        elseif ( !$this->shorty_model->redirect($sl) )
+
+                        # Redirect to the shortlinks' destination
+                        elseif ( !$this->shorty_model->send_to_target($sl) )
                         {
-                          $this->load->view('shorty/redirect-fault'); 
+                                # show redirect error page
+                                $this->load->view('shorty/redirect-fault'); 
                         }
                 } 
                 else 
