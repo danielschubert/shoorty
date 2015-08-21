@@ -17,8 +17,8 @@
                           'name'        => 'url',
                           'id'          => 'url',
                           'placeholder' => 'http://www.irgendeine-geile-domain.org',
-                          'maxlength'   => '100',
-                          'size'        => '50',
+                          'maxlength'   => '200',
+                          'size'        => '150',
                           'style'       => 'width:50%',
                           'type'        => 'url',
                           'required'    => 'required'

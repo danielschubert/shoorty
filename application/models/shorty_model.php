@@ -18,9 +18,10 @@ class Shorty_model extends CI_Model {
 
         public function shorten($url) 
         {
-                #creates crc32 checksum from url. 
-                $shortlink = crc32($url);
-
+                ## creates crc32 checksum from url. 
+                # $shortlink = rand(crc32($url);
+                $shortlink = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',5)),0,5);
+                if ($this->link_already_there($shortlink)) {shorten($url);}
                 return $shortlink;
         }
 
@@ -53,6 +54,23 @@ class Shorty_model extends CI_Model {
                 $url = prep_url($dirrty_url);
 
                 return $url;
+        }
+
+        private function id_already_there($id)
+        {
+                # see if id is already present in database
+                $query = $this->db->query(" SELECT * FROM `shorty` WHERE `id` = '$id' ");
+        
+                if ( $query->num_rows() > 0 ) 
+                {
+                        # we have > 0 rows, so the id  is already present
+                        return true;
+                } 
+                else
+                { 
+                        # we have 0 result rows, the id is new
+                        return false;
+                }       
         }
 
         private function link_already_there($shortlink)
