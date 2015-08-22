@@ -16,10 +16,14 @@ class Shorty_model extends CI_Model {
                 return $query->result_array(); 
         }
 
+        private function get_shortlink_entry($shortlink)
+        {
+                $query = $this->db->query("SELECT * FROM `shorty` WHERE `shortlink` = '$shortlink'");
+                return $query;
+        }
+
         public function shorten($url) 
         {
-                ## creates crc32 checksum from url. 
-                # $shortlink = rand(crc32($url);
                 $shortlink = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',5)),0,5);
                 if ($this->link_already_there($shortlink)) {shorten($url);}
                 return $shortlink;
@@ -27,10 +31,11 @@ class Shorty_model extends CI_Model {
 
         public function send_to_target($shortlink) 
         {
-                $query = $this->db->query("SELECT * FROM `shorty` WHERE `shortlink` = '$shortlink'");
+                $query = $this->get_shortlink_entry($shortlink);
 
                 if ( $query->num_rows() > 0 )  
                 {
+                        # shortlink exists in DB
                         $this->load->helper('url');
                         $url = $query->row()->url;
                         
@@ -39,6 +44,7 @@ class Shorty_model extends CI_Model {
                 }                
                 else
                 {
+                        # shortlink not in DB
                         return false;            
                 }
         }
@@ -46,37 +52,25 @@ class Shorty_model extends CI_Model {
         public function sanitize_input()
         {
                 $this->load->helper('url');
-                # clean input from evil stuff
-                $dirrty_url = $this->input->post('url');
-                $dirrty_url = html_escape($dirrty_url);
+
+                # redirect to start when empty
+                if ($this->input->post('url') == "") 
+                { 
+                        redirect("/", 'location', 301);
+                }
+                
+                $url = html_escape($this->input->post('url'));
 
                 # prepend http:// if not present
-                $url = prep_url($dirrty_url);
+                $url = prep_url($url);
 
                 return $url;
-        }
-
-        private function id_already_there($id)
-        {
-                # see if id is already present in database
-                $query = $this->db->query(" SELECT * FROM `shorty` WHERE `id` = '$id' ");
-        
-                if ( $query->num_rows() > 0 ) 
-                {
-                        # we have > 0 rows, so the id  is already present
-                        return true;
-                } 
-                else
-                { 
-                        # we have 0 result rows, the id is new
-                        return false;
-                }       
         }
 
         private function link_already_there($shortlink)
         {
                 # see if link is already present in database
-                $query = $this->db->query(" SELECT * FROM `shorty` WHERE `shortlink` = '$shortlink' ");
+                $query = $this->get_shortlink_entry($shortlink);
         
                 if ( $query->num_rows() > 0 ) 
                 {
